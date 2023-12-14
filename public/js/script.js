@@ -8,7 +8,7 @@ let isShuffling = false
 let currentSongIndex = 0 // To keep track of the currently playing song
 // let value
 
-// let item
+let item
 const playlist_button = s("#playlist_button")
 const playlist = s("#playlist")
 const search_results_button = s("#search_results_button")
@@ -139,9 +139,9 @@ async function addToPlaylist(url, title, thumbnail){
         playlist.appendChild(li);
         hideItem(search_list)
         displayItem(playlist)
-    } else {
-        console.log("Song already exists in the playlist.");
-    }
+    // } else {
+    //     console.log("Song already exists in the playlist.");
+    // }
 }
 
 function play(url, index){
