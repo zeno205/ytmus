@@ -6,9 +6,9 @@ let playlistItems = []
 let originalPlaylistItems = [] // To store the original playlist
 let isShuffling = false
 let currentSongIndex = 0 // To keep track of the currently playing song
-let value
+// let value
 
-let item
+// let item
 const playlist_button = s("#playlist_button")
 const playlist = s("#playlist")
 const search_results_button = s("#search_results_button")
@@ -16,7 +16,7 @@ const search_list = s("#search_list")
 const search_bar = s("#search_bar")
 const search_button = s("#search_button")
 const audio = s("#audio")
-let db
+// let db
 
 playlist_button.onclick = ()=>{toggle(playlist)}
 search_results_button.onclick = ()=>{toggle(search_list)}
@@ -68,34 +68,34 @@ search_button.onclick = () => {
         s("#loader").style.display = "none"
     })
 }
-function loadPlaylist() {
-    // Retrieve the playlist from IndexedDB
-    let objectStore = db.transaction("playlist").objectStore("playlist");
+// function loadPlaylist() {
+//     // Retrieve the playlist from IndexedDB
+//     let objectStore = db.transaction("playlist").objectStore("playlist");
 
-    objectStore.openCursor().onsuccess = function (event) {
-        let cursor = event.target.result;
-        if (cursor) {
-            originalPlaylistItems.push(cursor.value);
-            cursor.continue();
-        }
-        else {
-        console.log("No more entries!");
-        // Update the UI here after the playlist has been fully loaded
-        updatePlaylistUI();
-      }
-    };
-}
+//     objectStore.openCursor().onsuccess = function (event) {
+//         let cursor = event.target.result;
+//         if (cursor) {
+//             originalPlaylistItems.push(cursor.value);
+//             cursor.continue();
+//         }
+//         else {
+//         console.log("No more entries!");
+//         // Update the UI here after the playlist has been fully loaded
+//         updatePlaylistUI();
+//       }
+//     };
+// }
 
-window.onload = ()=>{
-    let request = indexedDB.open("playlistDB");
-    request.onerror = function(event) {
-        console.log("Your browser does not support IndexDB. Playlists will not be saved");
-    };
-    request.onsuccess = function(event) {
-    db = event.target.result;
-        loadPlaylist();  // Call the function here
-    };
-}
+// window.onload = ()=>{
+//     let request = indexedDB.open("playlistDB");
+//     request.onerror = function(event) {
+//         console.log("Your browser does not support IndexDB. Playlists will not be saved");
+//     };
+//     request.onsuccess = function(event) {
+//     db = event.target.result;
+//         loadPlaylist();  // Call the function here
+//     };
+// }
 
 async function addToPlaylist(url, title, thumbnail){
     this.classList.add('disabled');
@@ -107,22 +107,22 @@ async function addToPlaylist(url, title, thumbnail){
     let audio_link = await response.json()
     let song = {url: audio_link, title: title, thumbnail: thumbnail}
     // Check if the song already exists in the playlist
-    let songExists = originalPlaylistItems.some(existingSong => existingSong.url === song.url);
+    // let songExists = originalPlaylistItems.some(existingSong => existingSong.url === song.url);
 
-    if (!songExists) {
+    // if (!songExists) {
         // If the song doesn't exist, add it to the playlist
         playlistItems.push(song)
         originalPlaylistItems.push(song) // Add to original playlist array
 
-        let request = db.transaction(["playlist"], "readwrite")
-        .objectStore("playlist")
-        .add(song);
-        request.onsuccess = function(event) {
-            console.log("Song has been added to your database.");
-        };
-        request.onerror = function(event) {
-            console.log("Unable to add data\r\nSong is aready exist in your database! ");
-        }
+        // let request = db.transaction(["playlist"], "readwrite")
+        // .objectStore("playlist")
+        // .add(song);
+        // request.onsuccess = function(event) {
+        //     console.log("Song has been added to your database.");
+        // };
+        // request.onerror = function(event) {
+        //     console.log("Unable to add data\r\nSong is aready exist in your database! ");
+        // }
         this.classList.remove('disabled');
         let li = document.createElement('li');
         li.onclick = function () {
@@ -210,22 +210,23 @@ audio.addEventListener('ended', function () {
     }
 });
 s("#clear_playlist_button").onclick = () => {
-    var db = indexedDB.open("playlistDB");
+    // var db = indexedDB.open("playlistDB");
 
-    db.onsuccess = function(event) {
-        var transaction = db.result.transaction(["playlist"], "readwrite");
-        var objectStore = transaction.objectStore("playlist");
-        var request = objectStore.clear();
+    // db.onsuccess = function(event) {
+    //     var transaction = db.result.transaction(["playlist"], "readwrite");
+    //     var objectStore = transaction.objectStore("playlist");
+    //     var request = objectStore.clear();
 
-        request.onsuccess = function(event) {
+    //     request.onsuccess = function(event) {
             console.log("Playlist cleared successfully.");
             playlist.innerHTML=""
             audio.src=""
             audio.load()
-        };
-    };
+    originalPlaylistItems = []
+        // };
+    // };
 
-    db.onerror = function(event) {
-        console.log("Unable to clear playlist.");
-    };
+    // db.onerror = function(event) {
+    //     console.log("Unable to clear playlist.");
+    // };
 }
